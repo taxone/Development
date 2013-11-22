@@ -125,6 +125,10 @@ public class SimpleTest {
 	 * 
 	 * Le variabili locali ad una esecuzione sono invece visibili solamente all'esecuzione
 	 * a cui sono locali e nessun'altra.
+	 * 
+	 * Le variabili locali di una esecuzione sono accedibili anche come variabili globali se chiamate sull'esecuzione stessa,
+	 * ovvero una variabile locale ad una certa esecuzione viene recuperata sia chiamando getVariableLocal() che getVariable()
+	 * su quella esecuzione.
 	 */
 	@Test
 	@Deployment(resources={"processes/MyProcess05.bpmn","processes/MyProcess04.bpmn"})
@@ -148,6 +152,8 @@ public class SimpleTest {
 		assertEquals("Le 2 esecuzioni vedono la stessa variabile",value,runtimeService.getVariable(subExecutionId, variableName));
 		assertNull("La variabile locale di una esecuzione non è visibile ad un'altra esecuzione",runtimeService.getVariableLocal(subExecutionId, localVariableName));
 		assertNull("La variabile locale di una esecuzione non è visibile ad un'altra esecuzione",runtimeService.getVariableLocal(mainExecutionId, localVariableName2));
+		assertEquals("Le variabili locali di una esecuzione sono accedibili anche come variabili globali se chiamate sull'esecuzione stessa"
+				,localValue,runtimeService.getVariable(mainExecutionId, localVariableName));
 	}
 	
 	
