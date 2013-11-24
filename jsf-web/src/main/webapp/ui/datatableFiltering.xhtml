@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="../templates/ui.xhtml">
+
+    <ui:define name="head">
+        <style type="text/css">
+            .ui-datatable .ui-datatable-header {
+                text-align: right !important;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <h1 class="title ui-widget-header ui-corner-all">DataTable - Filtering</h1>
+        <div class="entry">
+          
+            <h:form id="form">
+                
+                <p:dataTable id="dataTable" var="car" value="#{tableBean.carsSmall}" widgetVar="carsTable"
+                             emptyMessage="No cars found with given criteria" filteredValue="#{tableBean.filteredCars}">
+
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <h:outputText value="Search all fields:" />
+                            <p:inputText id="globalFilter" onkeyup="carsTable.filter()" style="width:150px" />
+                        </p:outputPanel>
+                    </f:facet>
+
+                    <p:column id="modelColumn" filterBy="#{car.model}" headerText="Model" footerText="contains" filterMatchMode="contains">
+                        <h:outputText value="#{car.model}" />
+                    </p:column>
+
+                    <p:column id="yearColumn" filterBy="#{car.year}" headerText="Year" footerText="startsWith">
+                        <h:outputText value="#{car.year}" />
+                    </p:column>
+
+                    <p:column id="manufacturerColumn" filterBy="#{car.manufacturer}" headerText="Manufacturer" footerText="exact" filterOptions="#{tableBean.manufacturerOptions}" filterMatchMode="exact">
+                        <h:outputText value="#{car.manufacturer}" />
+                    </p:column>
+
+                    <p:column id="colorColumn" filterBy="#{car.color}" headerText="Color" footerText="endsWith" filterMatchMode="endsWith">
+                        <h:outputText value="#{car.color}" />
+                    </p:column>
+
+                </p:dataTable>
+
+            </h:form>
+
+       
+
+        </div>
+
+    </ui:define>
+</ui:composition>

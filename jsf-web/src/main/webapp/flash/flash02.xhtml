@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<title>Flash 02</title>
+</h:head>
+<h:body>
+	<p>VAL1: #{flash02Bean.value}</p>
+
+
+<h:form>
+	<h:commandButton action="flash01?faces-redirect=true" actionListener="#{flash02Bean.putValueInFlash}" value="Back to Flash01"/>
+	<br/>
+	<h:commandButton value="Rimango Qui"/>
+</h:form>
+</h:body>
+
+</html>

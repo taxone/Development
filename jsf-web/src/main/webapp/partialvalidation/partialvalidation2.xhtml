@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Partial Validation Test</title>
+</h:head>
+<h:body>
+	
+	<h:form id="myForm">
+	
+	<h:panelGroup id="myPanelGroup">
+		
+		<p:dataTable value="#{partialValidation.values}" var="v" id="myDataTable" binding="#{partialValidation.uiData}">
+			<p:column>
+				<p:inputText value="#{v.value}" required="true" binding="#{partialValidation.uiInput}"/>
+			</p:column>		
+		</p:dataTable>
+		<p:inputText value="#{partialValidation.valueOne}" required="true"/>
+		<ui:remove>
+		<h:dataTable value="#{partialValidation.values}" var="v" id="myDataTable" binding="#{partialValidation.uiData}">
+			<h:column>
+				<h:inputText value="#{v.value}" required="true" binding="#{partialValidation.uiInput}"/>
+			</h:column>		
+		</h:dataTable>
+		</ui:remove>
+		<p:commandButton action="#{partialValidation.action2}" value="Update" update="myPanelGroup" process="@this">
+			<p:resetInput target="myPanelGroup"/>
+		</p:commandButton>
+	</h:panelGroup>	 
+		 
+		 <p:commandButton action="#{partialValidation.action}" value="Validate" ajax="false">
+		 	
+		 </p:commandButton>
+	</h:form>
+	
+	<h:messages />
+</h:body>
+
+</html>

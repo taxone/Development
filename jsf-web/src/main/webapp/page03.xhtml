@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	 xmlns:tax="http://java.sun.com/jsf/composite/taxone">
+<h:head>
+	<title>Page 03</title>
+</h:head>
+<h:body>
+	
+	
+	<h:form>
+		<tax:mycomp action="#{page03Bean.execute}" myMethod="execute">
+			<f:actionListener for="myActionListener" binding="#{page03Bean}"/>
+			<h:outputText value="Contenuto"/>
+			<h:outputText value=" Ciao"/>
+		</tax:mycomp>
+		<p>
+		<tax:mycomp2 controller="#{page03Bean}"/>
+		</p>
+	</h:form>
+	
+</h:body>
+
+</html>

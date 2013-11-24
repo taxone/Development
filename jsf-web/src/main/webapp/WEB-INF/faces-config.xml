@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
+    version="2.1">
+<application>
+	
+	<resource-bundle>
+		<base-name>claudio</base-name>
+		<var>appres</var>
+	</resource-bundle>
+	
+	<locale-config>
+		<default-locale>it</default-locale>
+	</locale-config>
+	
+	<system-event-listener>
+		<system-event-listener-class>it.tasso.MySystemEventListener</system-event-listener-class>
+		<system-event-class>javax.faces.event.PostConstructApplicationEvent</system-event-class>
+	</system-event-listener>
+</application>
+	
+	<managed-bean>
+        <managed-bean-name>tableBean</managed-bean-name>
+        <managed-bean-class>org.primefaces.examples.view.TableBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+
+</faces-config>

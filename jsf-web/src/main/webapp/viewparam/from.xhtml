@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<f:metadata>
+	<f:viewParam name="p1" value="Pippo da POST con Redirect"></f:viewParam>
+	<f:viewParam name="p2" value="#{fromBean.myData}"/>
+</f:metadata>
+<h:head>
+	<title>From</title>
+</h:head>
+<h:body>
+	<h:outputText value="From" />
+	<h:form>
+		<h:link outcome="to.xhtml" value="Vai GET">
+			<f:param name="p1" value="val1"/>
+		</h:link>
+		<p>
+		<h:commandButton value="Redirect" action="to?faces-redirect=true&amp;includeViewParams=true"/>
+		</p>
+		<p>
+		<h:commandButton value="Post senza redirect" action="to">
+			<f:param name="p1" value="Post senza redirect"/>
+		</h:commandButton>
+		</p>
+	</h:form>
+	
+	<h:messages />
+</h:body>
+
+</html>
