@@ -8,16 +8,20 @@ import static org.junit.Assert.assertNull;
 import it.claudio.proc04.ServiceBean;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.impl.persistence.entity.HistoricScopeInstanceEntity;
 import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ExecutionQuery;
 import org.activiti.engine.runtime.NativeExecutionQuery;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 import org.activiti.engine.test.ActivitiRule;
 import org.activiti.engine.test.Deployment;
 import org.junit.Rule;
@@ -38,6 +42,9 @@ public class SimpleTest {
 	
 	@Autowired
 	private RuntimeService runtimeService;
+	
+	@Autowired
+	private TaskService taskService;
 	
 	@Autowired
 	private HistoryService historyService;
@@ -156,5 +163,23 @@ public class SimpleTest {
 				,localValue,runtimeService.getVariable(mainExecutionId, localVariableName));
 	}
 	
-	
+	/**
+	 * Il nome di un task può essere reso dinamico, utilizzando ${var},
+	 * dove "var" è una variable di processo.
+	 * 
+	 */
+	@Test
+	@Deployment(resources={"processes/MyProcess06.bpmn"})
+	public void variablesReplacementInTaskName(){
+		Map<String,Object> map = new HashMap<>();
+		String nameValue = "Nome";
+		
+		map.put("myName", nameValue);
+		
+		runtimeService.startProcessInstanceByKey("MyProcess06",map);
+		
+		Task task = taskService.createTaskQuery().singleResult();
+		
+		assertEquals("L'espressione ${myName} usata nel campo nome del task è stata sostituita con la variabile",nameValue,task.getName());
+	}
 }
