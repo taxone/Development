@@ -45,7 +45,8 @@ public class MyTest {
 
 	/**
 	 * Il bean di Spring #{MyJavaDelegateBean} viene utilizzato come JavaDelegate
-	 * utilizzando il campo "Delegate Expression" del ServiceTask.
+	 * utilizzando il campo "Delegate Expression" del ServiceTask; le field expression
+	 * funzionano solo se si usa la DelegateExpression, altrimenti non vengono passate.
 	 * 
 	 * Il bean di Spring #{MyTaskListener] è utilizzato come TaskListener
 	 * usando "Delegate Expression" del listener di uno UserTask.
@@ -69,15 +70,9 @@ public class MyTest {
 		ManagementService managementService = activitiSpringRule.getManagementService();
 		RepositoryService repositoryService = activitiSpringRule.getRepositoryService();
 		
-		List<org.activiti.engine.repository.Deployment> deployments = repositoryService.createDeploymentQuery().list();
-		assertEquals("Sono deployate sia le risorse annotate che quelle definite via Spring",2,deployments.size());
-		ProcessDefinitionQuery processDefinitionQuery = repositoryService.createProcessDefinitionQuery();
-		for (org.activiti.engine.repository.Deployment deployment : deployments) {
-			System.out.println("Deployment: "+deployment.getName());
-			ProcessDefinition processDefinition = processDefinitionQuery.deploymentId(deployment.getId()).singleResult();
-			System.out.println("Processo: "+processDefinition.getKey());
-		}
-		
+		assertEquals("La risorsa annotata è stata correttamente deployata",1, repositoryService.createDeploymentQuery().deploymentName("MyTest.beanSpring").count());
+		assertEquals("La risorsa definita nel file XML di Spring  è stata correttamente deployata",1,repositoryService.createDeploymentQuery().deploymentName("Deploy Comune").count());
+
 		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("MyProcess01");
 		
 		
@@ -97,6 +92,10 @@ public class MyTest {
 		assertEquals(1,historicIdentityLinksForProcessInstance.size());
 		HistoricIdentityLink identityLink = historicIdentityLinksForProcessInstance.get(0);
 		System.out.println("Authenticated User "+identityLink.getUserId()+" was involved as "+identityLink.getType());
+		
+		assertEquals("Il bean di Spring #{MyJavaDelegateBean} ha correttamente letto la Field Expression.",
+				1,activitiSpringRule.getHistoryService().createHistoricVariableInstanceQuery()
+				.variableValueEquals(it.claudio.MyJavaDelegateBean.VAR_NAME, "ciao").count());
 	}
 	
 	/**

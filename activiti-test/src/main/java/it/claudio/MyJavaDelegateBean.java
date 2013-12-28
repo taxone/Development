@@ -1,16 +1,15 @@
 package it.claudio;
 
 import lombok.Setter;
-import lombok.experimental.Builder;
 
 import org.activiti.engine.delegate.DelegateExecution;
+import org.activiti.engine.delegate.Expression;
 import org.activiti.engine.delegate.JavaDelegate;
-import org.activiti.engine.impl.el.Expression;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class MyJavaDelegateBean implements JavaDelegate {
 
-	
+	public static final String VAR_NAME = MyJavaDelegateBean.class.getName()+".VAR_NAME";
 	
 	@Autowired
 	private MyServiceBean myServiceBean;
@@ -18,9 +17,11 @@ public class MyJavaDelegateBean implements JavaDelegate {
 	@Setter
 	private Expression exprField;
 	
-	public void execute(DelegateExecution arg0) throws Exception {
-		System.out.println("Ciao dal Java Delegate: "+exprField.getValue(arg0));
+	public void execute(DelegateExecution execution) throws Exception {
+		Object value = exprField.getValue(execution);
+		System.out.println("Ciao dal Java Delegate: "+value);
 
+		execution.setVariable(VAR_NAME, value);
 	}
 
 }

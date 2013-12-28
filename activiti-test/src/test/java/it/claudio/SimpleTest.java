@@ -182,4 +182,19 @@ public class SimpleTest {
 		
 		assertEquals("L'espressione ${myName} usata nel campo nome del task è stata sostituita con la variabile",nameValue,task.getName());
 	}
+	
+	/**
+	 * A una classe Java Delegate di Activiti è possibile passare come Field Extention un bean di Spring, utilizzando una DelegateExpression.
+	 */
+	@Test
+	@Deployment(resources={"processes/MyProcess07.bpmn"})
+	public void fieldExtensions(){
+		runtimeService.startProcessInstanceByKey("MyProcess07");
+		
+		String value = (String) historyService.createHistoricVariableInstanceQuery().variableName(ServiceBean.A_VAR).singleResult().getValue();
+		
+		assertEquals("Valore settato nella executon dal bean di Spring referenziato da it.claudio.proc07.JavaDelegateImpl",
+				ServiceBean.A_VALUE,value);
+		
+	}
 }

@@ -35,7 +35,11 @@
 		<property name="transactionManager" ref="transactionManager" />
 		<property name="databaseSchemaUpdate" value="true" />
 		<property name="jobExecutorActivate" value="false" />
-		<property name="deploymentResources" value="classpath:processes/MyProcess.bpmn"/>
+		<property name="deploymentResources">
+			<array>
+				<value>classpath:processes/ExperimentalProcess.bpmn</value>			
+			</array>
+		</property>
 		
 	</bean>
 

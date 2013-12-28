@@ -25,7 +25,7 @@ public class ExperimentalTest {
 	 */
 	@Test
 	public void test() {
-		ProcessInstance processInstance = activitiSpringRule.getRuntimeService().startProcessInstanceByKey("SimpleProcess");
+		ProcessInstance processInstance = activitiSpringRule.getRuntimeService().startProcessInstanceByKey("ExperimentalProcess");
 		
 		assertNotNull(processInstance);
 	}
