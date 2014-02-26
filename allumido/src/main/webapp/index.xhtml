@@ -36,6 +36,9 @@
 			<p:ajax event="rowEdit" listener="#{browserBean.nodeDetail.onEditProperty}" update="ProperyDataTable"/>
 		
 			<f:facet name="header">Properties</f:facet>
+			<p:column headerText="Local NameSpace">
+				#{prop.definition.localNamespace}
+			</p:column>
 			<p:column headerText="Local Name">
 				#{prop.definition.localName}
 			</p:column>
