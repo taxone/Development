@@ -31,6 +31,10 @@ import org.apache.chemistry.opencmis.commons.exceptions.CmisRuntimeException;
 @SessionScoped
 public class BrowserBean {
 
+	private static final String ALFRESCO_LOCALHOST = "http://localhost:8080/alfresco/service/cmis";
+	
+	private static final String ALFRESCO_REMOTE = "http://cmis.alfresco.com/cmisatom";
+
 	private Session session;
 	
 	@Getter
@@ -54,7 +58,7 @@ public class BrowserBean {
 
 		// Connection settings.
 		parameter.put(SessionParameter.ATOMPUB_URL,
-		    "http://localhost:8080/alfresco/service/cmis"); // URL to your CMIS server.
+				ALFRESCO_LOCALHOST); // URL to your CMIS server.
 		// parameter.put(SessionParameter.REPOSITORY_ID, "myRepository"); // Only necessary if there is more than one repository.
 		parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
 
@@ -63,6 +67,9 @@ public class BrowserBean {
 		parameter.put(SessionParameter.LOCALE_ISO639_LANGUAGE, "en");
 		parameter.put(SessionParameter.LOCALE_VARIANT, "US");
 
+		parameter.put(SessionParameter.OBJECT_FACTORY_CLASS, "org.alfresco.cmis.client.impl.AlfrescoObjectFactoryImpl");
+
+		
 		// Create session.
 		session = null;
 		try {
