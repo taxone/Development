@@ -54,7 +54,7 @@ public class BrowserBean {
 
 		// User credentials.
 		parameter.put(SessionParameter.USER, "admin");
-		parameter.put(SessionParameter.PASSWORD, "admin");
+		parameter.put(SessionParameter.PASSWORD, "cpr2000");
 
 		// Connection settings.
 		parameter.put(SessionParameter.ATOMPUB_URL,
