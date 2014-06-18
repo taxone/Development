@@ -16,6 +16,7 @@ import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.impl.persistence.entity.HistoricScopeInstanceEntity;
 import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ExecutionQuery;
@@ -196,5 +197,39 @@ public class SimpleTest {
 		assertEquals("Valore settato nella executon dal bean di Spring referenziato da it.claudio.proc07.JavaDelegateImpl",
 				ServiceBean.A_VALUE,value);
 		
+	}
+	
+	/**
+	 * La documentazione di un task viene recuperata attraverso il metodo {@link Task#getDescription()} ed è dinamica, nel senso che le
+	 * eventuali variabili definite con ${variable} vengono sostitutite con i valori attuali.
+	 * 
+	 * 
+	 */
+	@Test
+	@Deployment(resources={"processes/MyProcess08.bpmn"})
+	public void docs(){
+		Map<String,Object> vars = new HashMap<>();
+		final String value = "test";
+		vars.put("variable", value);
+		
+		String processInstanceId = runtimeService.startProcessInstanceByKey("MyProcess08",vars).getProcessInstanceId();
+		
+		assertEquals("La variabile presente nella documentazione del task viene sostituita.",
+				String.format("Task Documentation %s", value),taskService.createTaskQuery().singleResult().getDescription());
+		
+	}
+	
+	/**
+	 * Se un sotto-processo termina con un error event, il boundary error event della call activity
+	 * lo cattura.
+	 * 
+	 */
+	@Test
+	@Deployment(resources={"processes/MyProcess09.bpmn","processes/MyProcess10.bpmn"})
+	public void  callActivityErrorCode(){
+		runtimeService.startProcessInstanceByKey("MyProcess09");
+		
+		assertEquals("Error Boundary event catturato sulla Call Activity",
+				1,taskService.createTaskQuery().taskDefinitionKey("errorUserTask").count());
 	}
 }
