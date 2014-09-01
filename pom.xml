@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sf.launch4j</groupId>
 	<artifactId>launch4j</artifactId>
-	<version>3.4.0-SNAPSHOT</version>
+	<version>3.4.0</version>
 	<name>Launch4j</name>
 	<description>
 			Cross-platform Java executable wrapper for creating lightweight Windows native EXEs. 
@@ -196,8 +196,7 @@
 						<version>1.5</version>
 						<executions>
 							<execution>
-								<id>sign-artifacts</id>
-								<!-- <phase>verify</phase> -->
+								<id>sign-artifacts</id>								
 								<goals>
 									<goal>sign</goal>
 								</goals>
@@ -212,30 +211,11 @@
 						<configuration>
 							<serverId>ossrh</serverId>
 							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+							<!-- Release has to be executed manually -->
+							<autoReleaseAfterClose>false</autoReleaseAfterClose>
 						</configuration>
 					</plugin>
-<!-- 					<plugin> -->
-<!-- 						<groupId>org.apache.maven.plugins</groupId> -->
-<!-- 						<artifactId>maven-deploy-plugin</artifactId> -->
-<!-- 						<version>2.8.1</version> -->
-<!-- 						<executions> -->
-<!-- 							<execution> -->
-<!-- 								<phase> -->
-<!-- 									deploy -->
-<!-- 								</phase> -->
-<!-- 								<goals> -->
-<!-- 									<goal>deploy-file</goal> -->
-<!-- 								</goals> -->
-<!-- 								<configuration> -->
-<!-- 									<repositoryId>ossrh</repositoryId> -->
-<!-- 									<file>target/${project.build.finalName}-core.jar</file> -->
-<!-- 									<classifier>core</classifier> -->
-<!-- 								</configuration> -->
-<!-- 							</execution> -->
-<!-- 						</executions> -->
 
-<!-- 					</plugin> -->
 				</plugins>
 			</build>
 		</profile>
