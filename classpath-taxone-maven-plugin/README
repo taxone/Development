@@ -1,7 +1,7 @@
 ClassPath Maven Plugin
 ----------------------
 
-Using this Maven plugin it is possible accessing to a variable which contain the runtime dependencies of the current Maven project in your POM.xml file.
+Using this Maven plugin it is possible accessing to a variable which contains the runtime dependencies of the current Maven project in your POM.xml file.
 For example, suppose that you need to create a custom "Class-Path" entry in your Manifest.MF like this:
 
 Class-Path: . myfirst.jar mysecond.jar
