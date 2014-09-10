@@ -1,0 +1,56 @@
+ClassPath Maven Plugin
+----------------------
+
+Using this Maven plugin it is possible accessing to a variable which contain the runtime dependencies of the current Maven project in your POM.xml file.
+For example, suppose that you need to create a custom "Class-Path" entry in your Manifest.MF like this:
+
+Class-Path: . myfirst.jar mysecond.jar
+
+Moreover, suppose that you are using an all-in-one jar assembler like Eclipse "jarinjarloader" and you need to create an entry like this in Manifest.MF:
+
+Rsrc-Class-Path: ./ myfirst.jar mysecond.jar
+
+It's not possible to achieve this using the standanard Maven Archiver (http://maven.apache.org/shared/maven-archiver/examples/classpath.html).
+Using the ClassPath plugin you can do it:
+
+<plugin>
+	<groupId>it.taxone.plugins</groupId>
+	<artifactId>classpath-maven-plugin</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<executions>
+		<execution>
+			<id>set-classpath-property</id>
+			<phase>prepare-package</phase>
+			<goals>
+				<goal>setClassPath</goal>
+			</goals>	
+			<configuration>
+				<classpathPrefix>lib/</classpathPrefix>	
+			</configuration>					
+		</execution>
+	</executions>
+</plugin>
+<plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-jar-plugin</artifactId>
+	<version>2.5</version>
+	<executions>
+		<execution>
+		<id>default-jar</id>
+		<phase>package</phase>
+		<goals>
+			<goal>jar</goal>
+		</goals>
+		<configuration>
+			<archive>
+				 <manifestEntries>
+				 	<Class-Path>. ${taxone.classpath.propertyName}</Class-Path>
+				 </manifestEntries>
+				</archive>
+			</configuration>
+		</execution>
+	</executions>
+</plugin>
+
+Use the command "mvn classpath:help -Ddetail=true -Dgoal=setClassPath" for a complete list of the available options.
+
