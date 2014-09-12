@@ -29,7 +29,7 @@ requiresDependencyResolution = ResolutionScope.RUNTIME
 )
 public class ClassPathMojo extends AbstractMojo {
 
-	@Component
+	@Parameter( defaultValue="${project}",readonly=true)
 	private MavenProject project;
 	
 	/**
@@ -60,7 +60,9 @@ public class ClassPathMojo extends AbstractMojo {
 			
 			ManifestConfiguration config = new ManifestConfiguration();
 			config.setAddClasspath(true);
-			config.setClasspathPrefix(classpathPrefix);
+			if(classpathPrefix!=null){
+				config.setClasspathPrefix(classpathPrefix);
+			}
 			Manifest manifest = mavenArchiver.getManifest(project, config);
 			
 			
