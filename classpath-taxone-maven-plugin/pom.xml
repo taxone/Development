@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.taxone.plugins</groupId>
 	<artifactId>classpath-maven-plugin</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>maven-plugin</packaging>
 
 	<name>ClassPath Maven Plugin</name>
@@ -16,6 +16,19 @@
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 	</licenses>
+
+	<developers>
+		<developer>
+			<name>Claudio Tasso</name>
+			<url>https://github.com/taxone</url>
+		</developer>
+	</developers>
+
+	<scm>
+		<url>https://github.com/taxone/Development.git</url>
+		<connection>scm:git:git@github.com:taxone/Development.git</connection>
+		<developerConnection>scm:git:git@github.com:taxone/Development.git</developerConnection>
+	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
