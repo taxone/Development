@@ -101,6 +101,7 @@ public class RcBuilder {
 	public static final int MAX_HEAP_PERCENT = 28;
 	public static final int BUNDLED_JRE_64_BIT = 29;
 	public static final int RUNTIME_BITS = 30;
+	public static final int RESTART_ON_CRASH = 31;
 
 	public static final int STARTUP_ERR = 101;
 	public static final int BUNDLED_JRE_ERR = 102;
@@ -138,6 +139,7 @@ public class RcBuilder {
 		addWindowsPath(CHDIR, c.getChdir());
 		addText(PRIORITY_CLASS, String.valueOf(c.getPriorityClass()));
 		addTrue(GUI_HEADER_STAYS_ALIVE, c.isStayAlive());
+		addTrue(RESTART_ON_CRASH, c.isRestartOnCrash());
 		addSplash(c.getSplash());
 		addMessages(c);
 
@@ -247,9 +249,9 @@ public class RcBuilder {
 		addText(JDK_PREFERENCE, String.valueOf(jre.getJdkPreferenceIndex()));
 		
 		String runtimeBits = jre.getRuntimeBits();
-		int use64Bits = runtimeBits == Jre.RUNTIME_BITS_64 || runtimeBits == Jre.RUNTIME_BITS_64_AND_32
+		int use64Bits = Jre.RUNTIME_BITS_64.equals(runtimeBits) || Jre.RUNTIME_BITS_64_AND_32.equals(runtimeBits)
 				? USE_64_BIT_RUNTIME : 0;
-		int use32Bits = runtimeBits == Jre.RUNTIME_BITS_32 || runtimeBits == Jre.RUNTIME_BITS_64_AND_32
+		int use32Bits = Jre.RUNTIME_BITS_32.equals(runtimeBits) || Jre.RUNTIME_BITS_64_AND_32.equals(runtimeBits)
 				? USE_32_BIT_RUNTIME : 0;
 		addInteger(RUNTIME_BITS, use64Bits | use32Bits);
 		addInteger(INITIAL_HEAP_SIZE, jre.getInitialHeapSize());

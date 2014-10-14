@@ -954,11 +954,10 @@ int prepare(const char *lpCmdLine)
 	return TRUE;
 }
 
-void closeHandles()
+void closeProcessHandles()
 {
 	CloseHandle(pi.hThread);
 	CloseHandle(pi.hProcess);
-	closeLogFile();
 }
 
 /*
@@ -978,33 +977,36 @@ BOOL appendToPathVar(const char* path)
 	return SetEnvironmentVariable("Path", chBuf);
 }
 
-DWORD execute(const BOOL wait)
+BOOL execute(const BOOL wait, DWORD *dwExitCode)
 {
 	STARTUPINFO si;
     memset(&pi, 0, sizeof(pi));
     memset(&si, 0, sizeof(si));
     si.cb = sizeof(si);
 
-	DWORD dwExitCode = -1;
 	char cmdline[MAX_ARGS] = {0};
     strcpy(cmdline, "\"");
 	strcat(cmdline, cmd);
 	strcat(cmdline, "\" ");
 	strcat(cmdline, args);
+
 	if (CreateProcess(NULL, cmdline, NULL, NULL,
 			TRUE, priority, NULL, NULL, &si, &pi))
 	{
 		if (wait)
 		{
 			WaitForSingleObject(pi.hProcess, INFINITE);
-			GetExitCodeProcess(pi.hProcess, &dwExitCode);
-			debug("Exit code:\t%d\n", dwExitCode);
-			closeHandles();
+			GetExitCodeProcess(pi.hProcess, dwExitCode);
+			closeProcessHandles();
 		}
 		else
 		{
-			dwExitCode = 0;
+			*dwExitCode = 0;
 		}
+		
+		return TRUE;
 	}
-	return dwExitCode;
+
+	*dwExitCode = -1;
+	return FALSE;
 }
