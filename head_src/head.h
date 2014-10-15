@@ -51,7 +51,7 @@
 #include <process.h>
 
 #define LAUNCH4j "Launch4j"
-#define VERSION "3.5"
+#define VERSION "3.6"
 
 #define NO_JAVA_FOUND 0
 #define FOUND_JRE 1
@@ -116,8 +116,8 @@ void appendHeapSize(char *dst, const int megabytesID, const int percentID,
 		const DWORDLONG availableMemory, const char *option);
 void setJvmOptions(char *jvmOptions, const char *exePath);
 int prepare(const char *lpCmdLine);
-void closeHandles();
+void closeProcessHandles();
 BOOL appendToPathVar(const char* path);
-DWORD execute(const BOOL wait);
+BOOL execute(const BOOL wait, DWORD *dwExitCode);
 
 #endif // _LAUNCH4J_HEAD__INCLUDED_
