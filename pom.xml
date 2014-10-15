@@ -44,6 +44,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<versionNumber>3.5.0.0</versionNumber>
+		<version>3.5</version>
 	</properties>
 
 	<dependencies>
@@ -51,6 +53,12 @@
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.9.2</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-collections</artifactId>
+					<groupId>commons-collections</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
@@ -117,17 +125,17 @@
 			<plugin>
 				<groupId>com.github.taxone.plugins</groupId>
 				<artifactId>classpath-maven-plugin</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>1.0.0</version>
 				<executions>
 					<execution>
 						<id>set-classpath-property</id>
 						<phase>prepare-package</phase>
 						<goals>
 							<goal>setClassPath</goal>
-						</goals>	
+						</goals>
 						<configuration>
-							<classpathPrefix>lib/</classpathPrefix>	
-						</configuration>					
+							<classpathPrefix>lib/</classpathPrefix>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -146,12 +154,10 @@
 							<archive>
 								<manifest>
 									<mainClass>net.sf.launch4j.Main</mainClass>
-<!-- 									<addClasspath>true</addClasspath> -->
-<!-- 									<classpathPrefix>lib/</classpathPrefix>									 -->
 								</manifest>
-								 <manifestEntries>
-								 	<Class-Path>. ${taxone.classpath.propertyName}</Class-Path>
-								 </manifestEntries>
+								<manifestEntries>
+									<Class-Path>. ${taxone.classpath.propertyName}</Class-Path>
+								</manifestEntries>
 							</archive>
 						</configuration>
 					</execution>
@@ -174,6 +180,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.4.1</version>
 				<executions>
 					<execution>
 						<id>assemble-workdir</id>
@@ -185,11 +192,64 @@
 							<descriptors>
 								<descriptor>assembly/assemble-linux.xml</descriptor>
 								<descriptor>assembly/assemble-win32.xml</descriptor>
-								<descriptor>assembly/assemble-mac.xml</descriptor>								
+								<descriptor>assembly/assemble-mac.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+					<execution>
+						<id>assemble-distrib</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<finalName>lib</finalName>
+							<outputDirectory>${basedir}</outputDirectory>
+							<appendAssemblyId>false</appendAssemblyId>
+							<descriptors>
+								<descriptor>assembly/assemble-dist.xml</descriptor>
 							</descriptors>
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}</outputDirectory>
+							<resources>
+								<resource>
+									<directory>target</directory>
+									<includes>
+										<include>${project.build.finalName}.jar</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>${basedir}</directory>
+							<includes>
+								<include>${project.build.finalName}.jar</include>
+							</includes>
+						</fileset>
+					</filesets>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -251,6 +311,174 @@
 						</configuration>
 					</plugin>
 
+				</plugins>
+			</build>
+		</profile>
+		<!-- Linux Distribution -->
+		<profile>
+			<id>dist-linux</id>
+			<build>
+				<plugins>
+					<!-- Clean -->
+					<plugin>
+						<artifactId>maven-clean-plugin</artifactId>
+						<version>2.6</version>
+						<configuration>
+							<filesets>								
+								<fileset>
+									<directory>${basedir}/bin</directory>
+									<includes>
+										<incude>*</incude>
+									</includes>
+									<excludes>
+										<exclude>COPYING</exclude>
+									</excludes>
+								</fileset>
+							</filesets>
+						</configuration>
+					</plugin>
+					<!-- Copies Linux executables to "bin" directory -->
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>2.6</version>
+						<executions>
+							<execution>
+								<id>copy-binutils</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${basedir}/bin</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${basedir}/bin/bin-linux</directory>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- Change Permissions -->
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<configuration>
+									<target>
+										<chmod file="launch4j" perm="+x" />
+										<chmod file="bin/windres" perm="+x" />
+										<chmod file="bin/ld" perm="+x" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<!-- Windows Distribution -->
+		<profile>
+			<id>dist-win32</id>
+			<activation>
+				<property>
+					<name>build.target</name>
+					<value>win32</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<!-- Clean -->
+					<plugin>
+						<artifactId>maven-clean-plugin</artifactId>
+						<version>2.6</version>
+						<configuration>
+							<filesets>
+								<fileset>
+									<directory>${basedir}</directory>
+									<includes>
+										<incude>launch4j.exe</incude>
+									</includes>
+								</fileset>
+								<fileset>
+									<directory>${basedir}/bin</directory>
+									<includes>
+										<incude>*</incude>
+									</includes>
+									<excludes>
+										<exclude>COPYING</exclude>
+									</excludes>
+								</fileset>
+							</filesets>
+						</configuration>
+					</plugin>
+					<!-- Copies Windows executables to "bin" directory -->
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>2.6</version>
+						<executions>
+							<execution>
+								<id>copy-binutils</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${basedir}/bin</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${basedir}/bin/bin-win32</directory>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- Creates Launch4j executable -->
+					<plugin>
+						<groupId>com.akathist.maven.plugins.launch4j</groupId>
+						<artifactId>launch4j-maven-plugin</artifactId>
+						<version>1.6-SNAPSHOT</version>
+						<executions>
+							<execution>
+								<id>launch4j</id>
+								<phase>package</phase>
+								<goals>
+									<goal>launch4j</goal>
+								</goals>
+								<configuration>
+									<headerType>gui</headerType>
+									<dontWrapJar>true</dontWrapJar>
+									<jar>${project.build.finalName}.jar</jar>
+									<outfile>launch4j.exe</outfile>
+									<errTitle>launch4j</errTitle>
+									<chdir>.</chdir>
+									<stayAlive>false</stayAlive>
+
+									<jre>
+										<minVersion>1.6.0</minVersion>
+									</jre>
+									<versionInfo>
+										<fileVersion>${versionNumber}</fileVersion>
+										<txtFileVersion>${version}</txtFileVersion>
+										<productVersion>${versionNumber}</productVersion>
+										<txtProductVersion>${version}</txtProductVersion>
+										<fileDescription>Cross-platform Java application wrapper</fileDescription>
+										<copyright>Copyright (C) 2004, 2014 Grzegorz Kowal</copyright>
+										<productName>launch4j</productName>
+										<companyName>http://launch4j.sourceforge.net/</companyName>
+										<internalName>GUI launcher</internalName>
+										<originalFilename>launch4j.exe</originalFilename>
+									</versionInfo>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
