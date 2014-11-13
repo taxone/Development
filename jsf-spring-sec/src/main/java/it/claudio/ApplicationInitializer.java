@@ -14,8 +14,8 @@ public class ApplicationInitializer implements WebApplicationInitializer {
 	@Override
 	public void onStartup(ServletContext servletContext)
 			throws ServletException {
-		ClassPathXmlApplicationContext context = 
-				new ClassPathXmlApplicationContext("application-context.xml");
+//		ClassPathXmlApplicationContext context = 
+//				new ClassPathXmlApplicationContext("application-context.xml");
 		
 //		ServletRegistration facesServlet = servletContext.addServlet("FacesServlet", FacesServlet.class);
 //		if(facesServlet==null){

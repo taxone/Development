@@ -9,6 +9,6 @@
 
 	<bean class="it.claudio.beans.MyBean"></bean>
 
-	<import resource="security-context.xml"/>
+	<import resource="securityContext.xml"/>
 
 </beans>
