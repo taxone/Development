@@ -10,5 +10,13 @@
       <p><h:outputText value="Ciao Mondo"/></p>
       <p>Tu sei #{userBean.userInfo}</p>
       
+      <p>
+      <h:outputLink value="#{request.contextPath}/saml/logout?local=true">Local Logout</h:outputLink>
+      </p>
+      
+       <p>
+       <h:outputLink value="#{request.contextPath}/saml/logout">Global Logout</h:outputLink>
+       </p>
+      
     </h:body>
 </html>

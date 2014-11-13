@@ -17,7 +17,7 @@
     <security:http security="none" pattern="/favicon.ico"/>
     <security:http security="none" pattern="/images/**"/>
     <security:http security="none" pattern="/css/**"/>
-    <security:http security="none" pattern="/logout.jsp"/>
+    <security:http security="none" pattern="/logout.html"/>
 
     <!-- Security for the administration UI -->
     <security:http pattern="/saml/web/**" access-denied-page="/saml/web/metadata/login">
@@ -68,7 +68,7 @@
 
     <!-- Handler for successful logout -->
     <bean id="successLogoutHandler" class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler">
-        <property name="defaultTargetUrl" value="/logout.jsp"/>
+        <property name="defaultTargetUrl" value="/logout.html"/>
     </bean>
 
     <security:authentication-manager alias="authenticationManager">
